@@ -76,18 +76,20 @@ public class ScheduleActivity extends AppCompatActivity {
                     float height = (float) itemView.getBottom() - (float) itemView.getTop();
                     float width = height / 3;
 
-                    if (dX > 0) {
+                    if (dX > 54) {
                         p.setColor(Color.parseColor("#D32F2F"));
                         RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX, (float) itemView.getBottom());
                         c.drawRect(background, p);
-                        Drawable drawable = AppCompatDrawableManager.get().getDrawable(getApplicationContext(), R.drawable.ic_delete_black_24dp);
-                        icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
-                                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-                        Canvas canvas = new Canvas(icon);
-                        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-                        drawable.draw(canvas);
-                        RectF icon_dest = new RectF((float) itemView.getLeft() + width, (float) itemView.getTop() + width, (float) itemView.getLeft() + 2 * width, (float) itemView.getBottom() - width);
-                        c.drawBitmap(icon, null, icon_dest, p);
+                        if (dX > 74){
+                            Drawable drawable = AppCompatDrawableManager.get().getDrawable(getApplicationContext(), R.drawable.ic_delete_black_24dp);
+                            icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                                    drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                            Canvas canvas = new Canvas(icon);
+                            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                            drawable.draw(canvas);
+                            RectF icon_dest = new RectF((float) itemView.getLeft() + width, (float) itemView.getTop() + width, (float) itemView.getLeft() + 2 * width, (float) itemView.getBottom() - width);
+                            c.drawBitmap(icon, null, icon_dest, p);
+                        }
                     }
                 }
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
