@@ -21,6 +21,10 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 
@@ -34,15 +38,33 @@ import ca.stmarysorthodoxchurch.churchadmin.models.Schedule;
  */
 
 public class AddScheduleActivity extends AppCompatActivity {
+    public static String KEY = "key";
     private static final String TAG = "AddScheduleActivity";
-    Schedule schedule = new Schedule();
+    private Schedule schedule = new Schedule();
     private ArrayAdapter<String> suggestionAdapter;
+    private String mKey;
     private ItemEventAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final ActivityAddscheduleBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_addschedule);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mKey = extras.getString(KEY);
+            ScheduleLab.getDatabase("/schedule").child(mKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    schedule = dataSnapshot.getValue(Schedule.class);
+                    binding.setSchedule(schedule);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         suggestionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"Prabhatha Namaskaram", "Holy Qurbana", "Sunday School"});
         binding.eventRecylerView.setLayoutManager(new LinearLayoutManager(this));
@@ -61,7 +83,6 @@ public class AddScheduleActivity extends AppCompatActivity {
             }
         });
         adapter = new ItemEventAdapter();
-        schedule.setEvents(new ArrayList<String>());
         binding.eventRecylerView.setAdapter(adapter);
         binding.dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +90,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                 new DatePickerDialog(AddScheduleActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        binding.titleEditText.setText(new DateFormatSymbols().getMonths()[month - 1]+", ");
+                        binding.titleEditText.setText(new DateFormatSymbols().getMonths()[month - 1] + ", ");
                     }
                 }, 2016, 7, 7).show();
             }
@@ -104,7 +125,11 @@ public class AddScheduleActivity extends AppCompatActivity {
                     Log.d(TAG, "onOptionsItemSelected: " + x);
                 }
                 schedule.setExpiryDate(String.valueOf(System.currentTimeMillis()));
-                ScheduleLab.getDatabase("/schedule").push().setValue(schedule);
+                if(mKey!=null){
+                    ScheduleLab.getDatabase("/schedule").child(mKey).setValue(schedule);
+                } else {
+                    ScheduleLab.getDatabase("/schedule").push().setValue(schedule);
+                }
                 finish();
                 return true;
             default:
@@ -135,8 +160,12 @@ public class AddScheduleActivity extends AppCompatActivity {
             });
             binding.eventEditText.setText(schedule.getEvents().get(position));
             binding.eventEditText.setAdapter(suggestionAdapter);
-            binding.eventEditText.showDropDown();
-            binding.eventEditText.requestFocus();
+            if(mKey!=null){
+                binding.eventEditText.clearFocus();
+            } else {
+                binding.eventEditText.showDropDown();
+                binding.eventEditText.requestFocus();
+            }
             binding.eventEditText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -170,6 +199,9 @@ public class AddScheduleActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
+            if (schedule.getEvents() == null) {
+                return 0;
+            }
             Log.d(TAG, "getItemCount: I am being called " + schedule.getEvents().size());
             return schedule.getEvents().size();
         }
