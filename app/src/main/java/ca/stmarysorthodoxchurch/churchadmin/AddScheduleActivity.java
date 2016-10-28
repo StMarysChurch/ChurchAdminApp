@@ -25,8 +25,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormatSymbols;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityAddscheduleBinding;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.EditTextListItemBinding;
@@ -38,8 +38,8 @@ import ca.stmarysorthodoxchurch.churchadmin.models.Schedule;
  */
 
 public class AddScheduleActivity extends AppCompatActivity {
-    public static String KEY = "key";
     private static final String TAG = "AddScheduleActivity";
+    public static String KEY = "key";
     private Schedule schedule = new Schedule();
     private ArrayAdapter<String> suggestionAdapter;
     private String mKey;
@@ -68,20 +68,6 @@ public class AddScheduleActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         suggestionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"Prabhatha Namaskaram", "Holy Qurbana", "Sunday School"});
         binding.eventRecylerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.titleEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                schedule.setTitle(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
         adapter = new ItemEventAdapter();
         binding.eventRecylerView.setAdapter(adapter);
         binding.dateButton.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +76,9 @@ public class AddScheduleActivity extends AppCompatActivity {
                 new DatePickerDialog(AddScheduleActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        binding.titleEditText.setText(new DateFormatSymbols().getMonths()[month - 1] + ", ");
+                        GregorianCalendar date = new GregorianCalendar(year + 1900, month, dayOfMonth);
+                        SimpleDateFormat fmt = new SimpleDateFormat("MMMM, d");
+                        binding.titleEditText.setText(fmt.format(date.getTime()));
                     }
                 }, 2016, 7, 7).show();
             }
@@ -125,7 +113,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                     Log.d(TAG, "onOptionsItemSelected: " + x);
                 }
                 schedule.setExpiryDate(String.valueOf(System.currentTimeMillis()));
-                if(mKey!=null){
+                if (mKey != null) {
                     ScheduleLab.getDatabase("/schedule").child(mKey).setValue(schedule);
                 } else {
                     ScheduleLab.getDatabase("/schedule").push().setValue(schedule);
@@ -160,7 +148,7 @@ public class AddScheduleActivity extends AppCompatActivity {
             });
             binding.eventEditText.setText(schedule.getEvents().get(position));
             binding.eventEditText.setAdapter(suggestionAdapter);
-            if(mKey!=null){
+            if (mKey != null) {
                 binding.eventEditText.clearFocus();
             } else {
                 binding.eventEditText.showDropDown();
