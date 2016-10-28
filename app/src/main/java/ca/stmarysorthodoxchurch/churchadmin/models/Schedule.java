@@ -10,7 +10,7 @@ public class Schedule {
 
     String title;
     long expiryDate;
-    ArrayList<String> events;
+    ArrayList<String> events = new ArrayList<>();
 
     public Schedule() {
 
