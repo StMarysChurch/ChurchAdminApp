@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Church Admin</string>
+    <string name="action_settings">Settings</string>
+    <string name="activity_addscheudle_title">Event</string>
+    <string name="activity_addscheudle_event_title_textview">Title</string>
+    <string name="activity_addscheudle_event_add_button">+ Event item</string>
+    <string name="save_menu">Save</string>
+</resources>
