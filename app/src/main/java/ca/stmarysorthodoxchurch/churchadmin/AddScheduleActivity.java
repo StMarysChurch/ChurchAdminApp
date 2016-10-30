@@ -44,11 +44,12 @@ public class AddScheduleActivity extends AppCompatActivity {
     private ArrayAdapter<String> suggestionAdapter;
     private String mKey;
     private ItemEventAdapter adapter;
+    private ActivityAddscheduleBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final ActivityAddscheduleBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_addschedule);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_addschedule);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mKey = extras.getString(KEY);
@@ -56,7 +57,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     schedule = dataSnapshot.getValue(Schedule.class);
-                    binding.setSchedule(schedule);
+                    initializeRecyclerView();
                 }
 
                 @Override
@@ -67,9 +68,6 @@ public class AddScheduleActivity extends AppCompatActivity {
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         suggestionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"Prabhatha Namaskaram", "Holy Qurbana", "Sunday School"});
-        binding.eventRecylerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ItemEventAdapter();
-        binding.eventRecylerView.setAdapter(adapter);
         binding.dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,11 +84,23 @@ public class AddScheduleActivity extends AppCompatActivity {
         binding.addTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: " + schedule.getEvents().size());
                 schedule.getEvents().add("");
+                if (schedule.getEvents().size() == 1) {
+                    initializeRecyclerView();
+                }
                 adapter.notifyItemChanged(schedule.getEvents().size() - 1);
                 Log.d(TAG, "onClick: " + schedule.getEvents().size());
             }
         });
+        Log.d(TAG, "onCreate: ");
+    }
+
+    private void initializeRecyclerView() {
+        binding.eventRecylerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.setSchedule(schedule);
+        adapter = new ItemEventAdapter();
+        binding.eventRecylerView.setAdapter(adapter);
     }
 
     @Override
