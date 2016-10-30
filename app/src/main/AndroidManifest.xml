@@ -20,7 +20,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ScheduleActivity" />
-        <activity android:name=".AddScheduleActivity" />
+        <activity
+            android:name=".AddScheduleActivity"
+            android:windowSoftInputMode="stateUnchanged" />
     </application>
 
 </manifest>
