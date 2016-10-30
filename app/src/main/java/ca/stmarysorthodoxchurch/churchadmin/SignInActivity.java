@@ -33,6 +33,10 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     private static int RC_SIGN_IN = 2420;
     private FirebaseAuth mAuth;
 
+    public static void signOut() {
+        FirebaseAuth.getInstance().signOut();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

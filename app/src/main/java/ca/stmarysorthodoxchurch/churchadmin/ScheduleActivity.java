@@ -16,6 +16,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -80,7 +83,7 @@ public class ScheduleActivity extends AppCompatActivity {
                         p.setColor(Color.parseColor("#D32F2F"));
                         RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX, (float) itemView.getBottom());
                         c.drawRect(background, p);
-                        if (dX > 74){
+                        if (dX > 74) {
                             Drawable drawable = AppCompatDrawableManager.get().getDrawable(getApplicationContext(), R.drawable.ic_delete_black_24dp);
                             icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
                                     drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -119,6 +122,26 @@ public class ScheduleActivity extends AppCompatActivity {
                 Log.d(TAG, "onCancelled: databaseError " + databaseError.getDetails());
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_schedule, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sign_out_menu:
+                SignInActivity.signOut();
+                startActivity(new Intent(getApplicationContext(), SignInActivity.class));
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private class ScheduleHolder extends RecyclerView.ViewHolder {

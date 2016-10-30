@@ -5,4 +5,5 @@
     <string name="activity_addscheudle_event_title_textview">Title</string>
     <string name="activity_addscheudle_event_add_button">+ Event item</string>
     <string name="save_menu">Save</string>
+    <string name="sign_out_menu">Sign Out</string>
 </resources>
