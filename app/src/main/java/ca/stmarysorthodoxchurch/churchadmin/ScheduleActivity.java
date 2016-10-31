@@ -84,7 +84,7 @@ public class ScheduleActivity extends AppCompatActivity {
                         RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX, (float) itemView.getBottom());
                         c.drawRect(background, p);
                         if (dX > 74) {
-                            Drawable drawable = AppCompatDrawableManager.get().getDrawable(getApplicationContext(), R.drawable.ic_delete_black_24dp);
+                            Drawable drawable = AppCompatDrawableManager.get().getDrawable(getApplicationContext(), R.drawable.ic_delete_sweep_white_24px);
                             icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
                                     drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
                             Canvas canvas = new Canvas(icon);

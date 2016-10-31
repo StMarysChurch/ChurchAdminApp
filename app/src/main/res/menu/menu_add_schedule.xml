@@ -4,7 +4,7 @@
     tools:context="ca.stmarysorthodoxchurch.churchadmin.AddScheduleActivity">
     <item
         android:id="@+id/save_menu"
-        android:icon="@android:drawable/ic_menu_save"
+        android:icon="@drawable/ic_save_white_24px"
         android:orderInCategory="100"
         android:title="@string/save_menu"
         app:showAsAction="always|collapseActionView" />
