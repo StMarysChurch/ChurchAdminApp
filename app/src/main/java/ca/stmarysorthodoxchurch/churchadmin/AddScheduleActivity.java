@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
-import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityAddscheduleBinding;
+import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityAddScheduleBinding;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.EditTextListItemBinding;
 import ca.stmarysorthodoxchurch.churchadmin.helper.ScheduleLab;
 import ca.stmarysorthodoxchurch.churchadmin.models.Schedule;
@@ -44,12 +44,12 @@ public class AddScheduleActivity extends AppCompatActivity {
     private ArrayAdapter<String> suggestionAdapter;
     private String mKey;
     private ItemEventAdapter adapter;
-    private ActivityAddscheduleBinding binding;
+    private ActivityAddScheduleBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_addschedule);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_add_schedule);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mKey = extras.getString(KEY);
@@ -67,7 +67,7 @@ public class AddScheduleActivity extends AppCompatActivity {
             });
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        suggestionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"Prabhatha Namaskaram", "Holy Qurbana", "Sunday School"});
+        suggestionAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"Prabhatha Namaskaram", "Holy Qurbana", "Sunday School"});
         binding.dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +77,8 @@ public class AddScheduleActivity extends AppCompatActivity {
                         GregorianCalendar date = new GregorianCalendar(year + 1900, month, dayOfMonth);
                         SimpleDateFormat fmt = new SimpleDateFormat("MMMM, d");
                         binding.titleEditText.setText(fmt.format(date.getTime()));
+                        binding.titleEditText.setSelection(binding.titleEditText.length());
+                        schedule.setTitle(fmt.format(date.getTime()));
                     }
                 }, 2016, 7, 7).show();
             }
@@ -118,9 +120,15 @@ public class AddScheduleActivity extends AppCompatActivity {
                 return true;
             case R.id.save_menu:
                 Toast.makeText(this, "Yes this is working", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onOptionsItemSelected: " + schedule.getTitle());
-                for (String x : schedule.getEvents()) {
-                    Log.d(TAG, "onOptionsItemSelected: " + x);
+                Log.d(TAG, "onOptionsItemSelected: title" + schedule.getTitle());
+                for (int a = schedule.getEvents().size() - 1; a >= 0; a--) {
+                    Log.d(TAG, "onOptionsItemSelected: size " + a);
+                    Log.d(TAG, "onOptionsItemSelected: event " + schedule.getEvents().get(a).length());
+                    if (schedule.getEvents().get(a).contentEquals("") | schedule.getEvents().get(a).length() == 0) {
+                        Log.d(TAG, "onOptionsItemSelected: event remove " + schedule.getEvents().get(a).length());
+                        Log.d(TAG, "onOptionsItemSelected: event remove " + a);
+                        schedule.getEvents().remove(a);
+                    }
                 }
                 schedule.setExpiryDate(String.valueOf(System.currentTimeMillis()));
                 if (mKey != null) {
@@ -171,7 +179,10 @@ public class AddScheduleActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    schedule.getEvents().set(position, s.toString());
+                    if (s.toString().length() != 0) {
+                        Log.d(TAG, "onTextChanged: " + s.toString().length());
+                        schedule.getEvents().set(position, s.toString());
+                    }
                 }
 
                 @Override
