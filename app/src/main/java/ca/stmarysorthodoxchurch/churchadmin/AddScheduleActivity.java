@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,6 +32,7 @@ import java.util.GregorianCalendar;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityAddScheduleBinding;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.EditTextListItemBinding;
 import ca.stmarysorthodoxchurch.churchadmin.helper.ScheduleLab;
+import ca.stmarysorthodoxchurch.churchadmin.helper.TouchHelper;
 import ca.stmarysorthodoxchurch.churchadmin.models.Schedule;
 
 /**
@@ -96,6 +98,17 @@ public class AddScheduleActivity extends AppCompatActivity {
             }
         });
         Log.d(TAG, "onCreate: ");
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new TouchHelper(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT, getApplicationContext()) {
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                Log.d(TAG, "onSwiped: " + direction);
+                int position = viewHolder.getAdapterPosition();
+                schedule.getEvents().remove(position);
+                adapter.notifyItemRemoved(position);
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(binding.eventRecylerView);
     }
 
     private void initializeRecyclerView() {
