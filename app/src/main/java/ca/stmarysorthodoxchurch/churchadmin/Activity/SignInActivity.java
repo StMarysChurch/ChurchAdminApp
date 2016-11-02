@@ -1,4 +1,4 @@
-package ca.stmarysorthodoxchurch.churchadmin;
+package ca.stmarysorthodoxchurch.churchadmin.Activity;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -22,6 +22,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivitySigninBinding;
 
 /**

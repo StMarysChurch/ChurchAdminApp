@@ -1,4 +1,4 @@
-package ca.stmarysorthodoxchurch.churchadmin;
+package ca.stmarysorthodoxchurch.churchadmin.Activity;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityScheduleBinding;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ScheduleListItemBinding;
 import ca.stmarysorthodoxchurch.churchadmin.helper.ScheduleLab;

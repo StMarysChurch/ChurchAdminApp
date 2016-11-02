@@ -1,4 +1,4 @@
-package ca.stmarysorthodoxchurch.churchadmin;
+package ca.stmarysorthodoxchurch.churchadmin.Activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
+import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityAddScheduleBinding;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.EditTextListItemBinding;
 import ca.stmarysorthodoxchurch.churchadmin.helper.ScheduleLab;
