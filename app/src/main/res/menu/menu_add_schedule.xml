@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ca.stmarysorthodoxchurch.churchadmin.AddScheduleActivity">
+    tools:context="ca.stmarysorthodoxchurch.churchadmin.Activity.AddScheduleActivity">
     <item
         android:id="@+id/save_menu"
         android:icon="@drawable/ic_save_white_24px"

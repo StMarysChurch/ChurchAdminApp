@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SignInActivity"
+            android:name=".Activity.SignInActivity"
             android:label="@string/app_name"
             android:noHistory="true"
             android:theme="@style/AppTheme">
@@ -19,9 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ScheduleActivity" />
+        <activity android:name=".Activity.ScheduleActivity" />
         <activity
-            android:name=".AddScheduleActivity"
+            android:name=".Activity.AddScheduleActivity"
             android:windowSoftInputMode="stateUnchanged" />
     </application>
 
