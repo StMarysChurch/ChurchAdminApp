@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityScheduleBinding;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ScheduleListItemBinding;
+import ca.stmarysorthodoxchurch.churchadmin.helper.ItemDecorator;
 import ca.stmarysorthodoxchurch.churchadmin.helper.ScheduleLab;
 import ca.stmarysorthodoxchurch.churchadmin.helper.TouchHelper;
 import ca.stmarysorthodoxchurch.churchadmin.models.Schedule;
@@ -46,7 +47,10 @@ public class ScheduleActivity extends AppCompatActivity {
             }
         });
         Log.d(TAG, "onCreate: " + mSchedule.size());
-        binding.scheduleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        binding.scheduleRecyclerView.setLayoutManager(layoutManager);
+        ItemDecorator itemDecoration = new ItemDecorator(getResources().getDisplayMetrics().density * 8);
+        binding.scheduleRecyclerView.addItemDecoration(itemDecoration);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new TouchHelper(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT, getApplicationContext()) {
 
             @Override
