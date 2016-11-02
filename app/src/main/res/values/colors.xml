@@ -3,6 +3,10 @@
     <color name="colorPrimary">#262626</color>
     <color name="colorPrimaryDark">#1f1f1f</color>
     <color name="colorAccent">#e94880</color>
+    <color name="colorBackground">#e7e7e7</color>
+
+
+    <color name="cardBackground">#f5f5f5</color>
 
     <color name="material_green_50">#E8F5E9</color>
     <color name="material_green_500">#4CAF50</color>
