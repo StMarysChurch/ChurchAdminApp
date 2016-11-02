@@ -49,7 +49,7 @@ public class ScheduleActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: " + mSchedule.size());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.scheduleRecyclerView.setLayoutManager(layoutManager);
-        ItemDecorator itemDecoration = new ItemDecorator(getResources().getDisplayMetrics().density * 8);
+        ItemDecorator itemDecoration = new ItemDecorator((int) getResources().getDisplayMetrics().density * 8);
         binding.scheduleRecyclerView.addItemDecoration(itemDecoration);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new TouchHelper(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT, getApplicationContext()) {
 

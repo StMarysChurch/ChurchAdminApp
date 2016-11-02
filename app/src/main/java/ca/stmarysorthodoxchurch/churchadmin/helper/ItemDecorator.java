@@ -12,9 +12,9 @@ import android.view.View;
 
 public class ItemDecorator extends ItemDecoration {
     private static final String TAG = "ItemDecorator";
-    float margin;
+    int margin;
 
-    public ItemDecorator(float v) {
+    public ItemDecorator(int v) {
         margin = v;
     }
 
@@ -24,7 +24,7 @@ public class ItemDecorator extends ItemDecoration {
         Log.d(TAG, "getItemOffsets: " + parent.getAdapter().getItemCount());
         if (parent.getChildCount() < parent.getAdapter().getItemCount()) {
             Log.d(TAG, "getItemOffsets: done");
-            outRect.bottom = (int) margin;
+            outRect.bottom = margin;
         }
     }
 }
