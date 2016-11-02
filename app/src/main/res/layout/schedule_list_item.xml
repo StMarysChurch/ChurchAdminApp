@@ -17,25 +17,72 @@
         card:background="@color/cardBackground"
         card:elevation="@dimen/cardview_default_elevation">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/activity_horizontal_card_margin"
-            android:paddingRight="@dimen/activity_horizontal_card_margin">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textView"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{schedule.title}" />
+                android:text="@{schedule.title}"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline_left"
+                app:layout_constraintRight_toLeftOf="@+id/guideline_right"
+                app:layout_constraintTop_toTopOf="@+id/guideline_top"
+                app:layout_constraintVertical_bias="0.0"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
             <LinearLayout
                 android:id="@+id/eventLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:orientation="vertical"
-                app:events="@{schedule.events}" />
-        </LinearLayout>
+                app:events="@{schedule.events}"
+                app:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline_left"
+                app:layout_constraintRight_toLeftOf="@+id/guideline_right"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="8dp"
+                card:layout_editor_absoluteX="8dp"
+                card:layout_editor_absoluteY="0dp" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="8dp"
+                card:layout_editor_absoluteX="376dp"
+                card:layout_editor_absoluteY="0dp" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline_top"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="8dp"
+                card:layout_editor_absoluteX="0dp"
+                card:layout_editor_absoluteY="8dp" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_end="0dp"
+                card:layout_editor_absoluteX="0dp"
+                card:layout_editor_absoluteY="91dp" />
+
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
 
