@@ -26,20 +26,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{schedule.title}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline_left"
                 app:layout_constraintRight_toLeftOf="@+id/guideline_right"
                 app:layout_constraintTop_toTopOf="@+id/guideline_top"
-                app:layout_constraintVertical_bias="0.0"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <LinearLayout
                 android:id="@+id/eventLinearLayout"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
                 android:orientation="vertical"
-                app:events="@{schedule.events}"
+                app:events="@{schedule}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline_left"

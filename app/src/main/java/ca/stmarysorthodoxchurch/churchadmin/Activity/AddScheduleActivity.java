@@ -26,7 +26,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import ca.stmarysorthodoxchurch.churchadmin.R;
@@ -41,6 +43,7 @@ import ca.stmarysorthodoxchurch.churchadmin.models.Schedule;
  */
 
 public class AddScheduleActivity extends AppCompatActivity {
+    public static final String CURRENT_TIME = "Current Time";
     private static final String TAG = "AddScheduleActivity";
     public static String KEY = "key";
     private Schedule schedule = new Schedule();
@@ -90,6 +93,7 @@ public class AddScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: " + schedule.getEvents().size());
+                schedule.getTimes().add(CURRENT_TIME);
                 schedule.getEvents().add("");
                 if (schedule.getEvents().size() == 1) {
                     initializeRecyclerView();
@@ -100,7 +104,6 @@ public class AddScheduleActivity extends AppCompatActivity {
         });
         Log.d(TAG, "onCreate: ");
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new TouchHelper(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT, getApplicationContext()) {
-
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 Log.d(TAG, "onSwiped: " + direction);
@@ -166,18 +169,34 @@ public class AddScheduleActivity extends AppCompatActivity {
         }
 
         public void bindEvent(final int position) {
-            binding.dateTextView.setText("Current Date");
-            binding.dateTextView.setOnClickListener(new View.OnClickListener() {
+            final Calendar calendar = Calendar.getInstance();
+            if (!schedule.getTimes().get(position).contentEquals(CURRENT_TIME)) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm aa");
+                try {
+                    calendar.setTime(dateFormat.parse(schedule.getTimes().get(position)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            binding.timeTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     new TimePickerDialog(AddScheduleActivity.this, new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            binding.dateTextView.setText(String.format("%d:%02d", hourOfDay, minute));
+                            String x;
+                            if (hourOfDay < 12) {
+                                x = String.format("%d:%02d %s", hourOfDay, minute, "am");
+                            } else {
+                                x = String.format("%d:%02d %s", hourOfDay - 12, minute, "pm");
+                            }
+                            binding.timeTextView.setText(x);
+                            schedule.getTimes().set(position, x);
                         }
-                    }, 8, 7, false).show();
+                    }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show();
                 }
             });
+            binding.timeTextView.setText(schedule.getTimes().get(position));
             binding.eventEditText.setText(schedule.getEvents().get(position));
             binding.eventEditText.setAdapter(suggestionAdapter);
             if (mKey != null) {

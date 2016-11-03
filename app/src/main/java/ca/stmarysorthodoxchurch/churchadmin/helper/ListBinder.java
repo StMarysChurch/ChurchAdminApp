@@ -9,6 +9,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ca.stmarysorthodoxchurch.churchadmin.R;
+import ca.stmarysorthodoxchurch.churchadmin.models.Schedule;
 
 
 /**
@@ -18,13 +19,13 @@ import ca.stmarysorthodoxchurch.churchadmin.R;
 public class ListBinder {
 
     @BindingAdapter("bind:events")
-    public static void bindList(LinearLayout layout, ArrayList<String> list) {
+    public static void bindEvents(LinearLayout layout, Schedule schedule) {
         LayoutInflater inflater = (LayoutInflater) layout.getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (list != null) {
-            for (String x : list) {
+        if (schedule != null) {
+            for (int a = 0; a < schedule.getEvents().size(); a++) {
                 TextView textView = (TextView) inflater.inflate(R.layout.event_list_item, null);
-                textView.setText(x);
+                textView.setText(schedule.getTimes().get(a)+":    "+schedule.getEvents().get(a));
                 layout.addView(textView);
             }
         }

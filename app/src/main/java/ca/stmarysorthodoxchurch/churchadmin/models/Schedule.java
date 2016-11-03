@@ -11,15 +11,17 @@ public class Schedule {
     String title;
     long expiryDate;
     ArrayList<String> events = new ArrayList<>();
+    ArrayList<String> times = new ArrayList<>();
 
     public Schedule() {
 
     }
 
-    public Schedule(String title, long expiryDate, ArrayList<String> events) {
+    public Schedule(String title, long expiryDate, ArrayList<String> events, ArrayList<String> times) {
         this.title = title;
         this.expiryDate = expiryDate;
         this.events = events;
+        this.times = times;
     }
 
     public String getTitle() {
@@ -44,5 +46,13 @@ public class Schedule {
 
     public void setEvents(ArrayList<String> events) {
         this.events = events;
+    }
+
+    public ArrayList<String> getTimes() {
+        return times;
+    }
+
+    public void setTimes(ArrayList<String> times) {
+        this.times = times;
     }
 }
