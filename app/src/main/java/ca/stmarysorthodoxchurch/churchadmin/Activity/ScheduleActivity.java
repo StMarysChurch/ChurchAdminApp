@@ -14,12 +14,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityScheduleBinding;
@@ -28,6 +32,8 @@ import ca.stmarysorthodoxchurch.churchadmin.helper.ItemDecorator;
 import ca.stmarysorthodoxchurch.churchadmin.helper.ScheduleLab;
 import ca.stmarysorthodoxchurch.churchadmin.helper.TouchHelper;
 import ca.stmarysorthodoxchurch.churchadmin.models.Schedule;
+
+import static ca.stmarysorthodoxchurch.churchadmin.Activity.SignInActivity.signOut;
 
 public class ScheduleActivity extends AppCompatActivity {
     private static final String TAG = "ScheduleActivity";
@@ -100,7 +106,7 @@ public class ScheduleActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sign_out_menu:
-                SignInActivity.signOut();
+                signOut();
                 startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                 finish();
                 return true;
