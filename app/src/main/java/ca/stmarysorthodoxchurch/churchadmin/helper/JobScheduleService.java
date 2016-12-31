@@ -19,11 +19,10 @@ import okhttp3.Response;
  */
 
 public class JobScheduleService extends JobService {
-
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
-
     OkHttpClient client = new OkHttpClient();
+    private String TAG = "JobScheduleService";
 
     void post(String url, String json) throws IOException {
         RequestBody body = RequestBody.create(JSON, json);
@@ -39,7 +38,7 @@ public class JobScheduleService extends JobService {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("job", response.body().string());
+                Log.d(TAG, response.body().string());
             }
         });
     }

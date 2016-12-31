@@ -20,10 +20,11 @@ import ca.stmarysorthodoxchurch.churchadmin.R;
  */
 
 public class TouchHelper extends ItemTouchHelper.SimpleCallback {
-    Paint p = new Paint();
-    Context context;
+    private Paint p = new Paint();
+    private Context context;
+    private String TAG = "TouchHelper";
 
-    public TouchHelper(int dragDirs, int swipeDirs, Context applicationContext) {
+    TouchHelper(int dragDirs, int swipeDirs, Context applicationContext) {
         super(dragDirs, swipeDirs);
         context = applicationContext;
     }
@@ -41,7 +42,7 @@ public class TouchHelper extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        Log.d("skdkskdf", "onChildDraw " + dX);
+        Log.d(TAG, "onChildDraw " + dX);
         Bitmap icon;
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
 
