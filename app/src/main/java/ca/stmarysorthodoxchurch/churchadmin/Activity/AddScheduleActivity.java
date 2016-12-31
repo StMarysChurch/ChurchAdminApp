@@ -2,8 +2,14 @@ package ca.stmarysorthodoxchurch.churchadmin.Activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +28,7 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -80,8 +87,9 @@ public class AddScheduleActivity extends AppCompatActivity {
                 new DatePickerDialog(AddScheduleActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        GregorianCalendar date = new GregorianCalendar(year + 1900, month, dayOfMonth);
-                        SimpleDateFormat fmt = new SimpleDateFormat("MMMM, d");
+                        GregorianCalendar date = new GregorianCalendar(year, month, dayOfMonth);
+                        SimpleDateFormat fmt = new SimpleDateFormat("MMMM d, EEEE");
+                        Log.d(TAG, "onDateSet: "+date.get(Calendar.DAY_OF_WEEK));
                         binding.titleEditText.setText(fmt.format(date.getTime()));
                         binding.titleEditText.setSelection(binding.titleEditText.length());
                         schedule.setTitle(fmt.format(date.getTime()));
@@ -149,9 +157,34 @@ public class AddScheduleActivity extends AppCompatActivity {
                 }
                 schedule.setExpiryDate(String.valueOf(System.currentTimeMillis()));
                 if (mKey != null) {
-                    ScheduleLab.getDatabase("/schedule").child(mKey).setValue(schedule);
+                    ScheduleLab.getDatabase("/schedule").child(mKey).setValue(schedule).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "onFailure: "+e.getMessage());
+                            SignInActivity.signOut();
+                            startActivity(new Intent(getApplicationContext(), SignInActivity.class));
+                            finish();
+                        }
+                    });
                 } else {
-                    ScheduleLab.getDatabase("/schedule").push().setValue(schedule);
+                    ScheduleLab.getDatabase("/schedule").push().setValue(schedule).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "onFailure: "+e.toString());
+                            SignInActivity.signOut();
+                            startActivity(new Intent(getApplicationContext(), SignInActivity.class));
+                            finish();
+                        }
+                    });;
+                }
+                ComponentName serviceName = new ComponentName(getApplicationContext(), ca.stmarysorthodoxchurch.churchadmin.helper.JobScheduleService.class);
+                JobInfo jobInfo = new JobInfo.Builder((int) System.currentTimeMillis(), serviceName)
+                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                        .build();
+                JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                int result = scheduler.schedule(jobInfo);
+                if (result == JobScheduler.RESULT_SUCCESS) {
+                    Toast.makeText(this, "sucess", Toast.LENGTH_LONG).show();
                 }
                 finish();
                 return true;

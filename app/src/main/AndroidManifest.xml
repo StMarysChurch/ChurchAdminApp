@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.stmarysorthodoxchurch.churchadmin">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,6 +24,10 @@
         <activity
             android:name=".Activity.AddScheduleActivity"
             android:windowSoftInputMode="stateUnchanged" />
+
+        <service
+            android:name=".helper.JobScheduleService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>
