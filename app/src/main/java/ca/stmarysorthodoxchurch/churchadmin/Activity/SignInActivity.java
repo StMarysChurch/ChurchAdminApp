@@ -1,6 +1,8 @@
 package ca.stmarysorthodoxchurch.churchadmin.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,15 +17,24 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivitySigninBinding;
+import ca.stmarysorthodoxchurch.churchadmin.helper.ScheduleLab;
 
 /**
  * Created by roneythomas on 2016-10-03.
@@ -33,6 +44,8 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     private static final String TAG = "SignInActivity";
     private static int RC_SIGN_IN = 2420;
     private FirebaseAuth mAuth;
+    private GoogleApiClient mGoogleApiClient;
+    private SharedPreferences sharedPref;
 
     public static void signOut() {
         FirebaseAuth.getInstance().signOut();
@@ -41,8 +54,10 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPref = getApplication().getSharedPreferences(getString(R.string.preference_auth_status), Context.MODE_PRIVATE);
+        boolean authStatus = sharedPref.getBoolean(getString(R.string.preference_auth_status), false);
         mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() != null) {
+        if (mAuth.getCurrentUser() != null && authStatus) {
             // already signed in
             startActivity(new Intent(this, ScheduleActivity.class));
         } else {
@@ -52,7 +67,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                     .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()
                     .build();
-            final GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .enableAutoManage(this, this)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
@@ -84,7 +99,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -101,11 +116,42 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            startActivity(new Intent(getApplicationContext(), ScheduleActivity.class));
-                            finish();
+                            authorization();
                         }
                     }
                 });
+    }
+
+    public void authorization() {
+        ScheduleLab.getDatabase("/scheduleUsers").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                sharedPref.edit().putBoolean(getString(R.string.preference_auth_status), true).commit();
+                Log.d(TAG, dataSnapshot.toString());
+                startActivity(new Intent(getApplicationContext(), ScheduleActivity.class));
+                finish();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                sharedPref.edit().putBoolean(getString(R.string.preference_auth_status), false).commit();
+                Toast.makeText(SignInActivity.this, "Not Authorized",
+                        Toast.LENGTH_SHORT).show();
+                Map<String, String> user = new HashMap<>();
+                user.put("email", mAuth.getCurrentUser().getEmail());
+                user.put("name", mAuth.getCurrentUser().getDisplayName());
+                user.put("profile_picture", String.valueOf(mAuth.getCurrentUser().getPhotoUrl()));
+                Log.d(TAG, "onCancelled: " + user.toString() + "\n" + mAuth.getCurrentUser().getUid());
+                ScheduleLab.getDatabase("/queue").child(mAuth.getCurrentUser().getUid()).setValue(user);
+                signOut();
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        Log.d(TAG, "Google Sign Out Status: " + status);
+                    }
+                });
+            }
+        });
     }
 
     @Override
