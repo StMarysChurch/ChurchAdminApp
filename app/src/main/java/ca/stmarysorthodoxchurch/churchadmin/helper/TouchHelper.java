@@ -7,7 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.AppCompatDrawableManager;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -24,7 +24,7 @@ public class TouchHelper extends ItemTouchHelper.SimpleCallback {
     private Context context;
     private String TAG = "TouchHelper";
 
-    TouchHelper(int dragDirs, int swipeDirs, Context applicationContext) {
+    protected TouchHelper(int dragDirs, int swipeDirs, Context applicationContext) {
         super(dragDirs, swipeDirs);
         context = applicationContext;
     }
@@ -55,7 +55,8 @@ public class TouchHelper extends ItemTouchHelper.SimpleCallback {
                 RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX, (float) itemView.getBottom());
                 c.drawRect(background, p);
                 if (dX > 74) {
-                    Drawable drawable = AppCompatDrawableManager.get().getDrawable(context, R.drawable.ic_delete_sweep_white_24px);
+                    //Drawable drawable = AppCompatDrawableManager.get().getDrawable(context, R.drawable.ic_delete_sweep_white_24px);
+                    Drawable drawable = VectorDrawableCompat.create(context.getResources(), R.drawable.ic_delete_sweep_white_24px, context.getTheme());
                     icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
                             drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(icon);
