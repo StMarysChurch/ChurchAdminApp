@@ -81,6 +81,7 @@ public class AddScheduleActivity extends AppCompatActivity {
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         suggestionAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"Prabhatha Namaskaram", "Holy Qurbana", "Sunday School"});
+        final Calendar today = Calendar.getInstance();
         binding.dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +95,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                         binding.titleEditText.setSelection(binding.titleEditText.length());
                         schedule.setTitle(fmt.format(date.getTime()));
                     }
-                }, 2016, 7, 7).show();
+                }, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
         binding.addTextView.setOnClickListener(new View.OnClickListener() {
