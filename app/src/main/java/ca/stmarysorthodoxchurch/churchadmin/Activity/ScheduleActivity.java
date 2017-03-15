@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -41,6 +42,7 @@ public class ScheduleActivity extends AppCompatActivity {
     ArrayList<String> mKeys = new ArrayList<>();
     private ActivityScheduleBinding binding;
     private ScheduleAdapter mScheduleAdapter = new ScheduleAdapter();
+    LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,6 @@ public class ScheduleActivity extends AppCompatActivity {
             }
         });
         Log.d(TAG, "onCreate: " + mSchedule.size());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.scheduleRecyclerView.setLayoutManager(layoutManager);
         ItemDecorator itemDecoration = new ItemDecorator((int) getResources().getDisplayMetrics().density * 8);
         binding.scheduleRecyclerView.addItemDecoration(itemDecoration);
@@ -86,6 +87,9 @@ public class ScheduleActivity extends AppCompatActivity {
                 }
                 Log.d(TAG, "onDataChange: " + mSchedule.size());
                 binding.scheduleRecyclerView.setAdapter(mScheduleAdapter);
+                DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(getApplicationContext(),
+                        layoutManager.getOrientation());
+                binding.scheduleRecyclerView.addItemDecoration(mDividerItemDecoration);
             }
 
             @Override
