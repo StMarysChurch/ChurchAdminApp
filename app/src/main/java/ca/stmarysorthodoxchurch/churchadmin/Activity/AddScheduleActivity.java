@@ -164,6 +164,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                         }
                     });
                 } else {
+                    Log.d(TAG, "onOptionsItemSelected: "+schedule.getTitle());
                     ScheduleLab.getDatabase("/schedule").push().setValue(schedule).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {

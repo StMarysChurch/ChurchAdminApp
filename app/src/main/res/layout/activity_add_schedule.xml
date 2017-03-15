@@ -43,21 +43,27 @@
 
         <ImageButton
             android:id="@+id/dateButton"
-            android:layout_width="wrap_content"
-            android:layout_height="43dp"
-            android:src="@drawable/ic_date_range_black_24dp"
+            style="@android:style/Widget.Material.ImageButton"
+            android:layout_width="57dp"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/colorAccent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_date_range_white_24px"
             app:layout_constraintBottom_toBottomOf="@+id/titleEditText"
             app:layout_constraintRight_toLeftOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="@+id/titleEditText"
-            app:layout_constraintVertical_bias="0.0" />
+            android:layout_marginRight="0dp"
+            tools:layout_editor_absoluteY="35dp"
+            tools:layout_editor_absoluteX="311dp" />
 
         <Button
             android:id="@+id/addTextView"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/activity_addscheudle_event_add_button"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/background_light"
             app:layout_constraintLeft_toLeftOf="@+id/guideline1"
             app:layout_constraintRight_toLeftOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/event_recylerView" />
