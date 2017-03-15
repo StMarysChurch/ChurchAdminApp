@@ -2,10 +2,6 @@ package ca.stmarysorthodoxchurch.churchadmin.Activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -177,15 +173,6 @@ public class AddScheduleActivity extends AppCompatActivity {
                             finish();
                         }
                     });;
-                }
-                ComponentName serviceName = new ComponentName(getApplicationContext(), ca.stmarysorthodoxchurch.churchadmin.helper.JobScheduleService.class);
-                JobInfo jobInfo = new JobInfo.Builder((int) System.currentTimeMillis(), serviceName)
-                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                        .build();
-                JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-                int result = scheduler.schedule(jobInfo);
-                if (result == JobScheduler.RESULT_SUCCESS) {
-                    Toast.makeText(this, "sucess", Toast.LENGTH_LONG).show();
                 }
                 finish();
                 return true;
