@@ -145,7 +145,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.save_menu:
-                Toast.makeText(this, "Yes this is working", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onOptionsItemSelected: title" + schedule.getTitle());
                 for (int a = schedule.getEvents().size() - 1; a >= 0; a--) {
                     Log.d(TAG, "onOptionsItemSelected: size " + a);
@@ -178,7 +178,6 @@ public class AddScheduleActivity extends AppCompatActivity {
                             finish();
                         }
                     });
-                    ;
                 }
                 finish();
                 return true;
