@@ -35,9 +35,9 @@ public class ScheduleActivity extends AppCompatActivity {
     private static final String TAG = "ScheduleActivity";
     ArrayList<Schedule> mSchedule = new ArrayList<>();
     ArrayList<String> mKeys = new ArrayList<>();
+    LinearLayoutManager layoutManager = new LinearLayoutManager(this);
     private ActivityScheduleBinding binding;
     private ScheduleAdapter mScheduleAdapter = new ScheduleAdapter();
-    LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

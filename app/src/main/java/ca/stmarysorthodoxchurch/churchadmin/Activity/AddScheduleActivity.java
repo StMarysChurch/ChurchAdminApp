@@ -60,6 +60,7 @@ public class AddScheduleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_schedule);
         Bundle extras = getIntent().getExtras();
+        // Checking if we have schedule in firebase
         if (extras != null) {
             mKey = extras.getString(KEY);
             ScheduleLab.getDatabase("/schedule").child(mKey).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -74,6 +75,9 @@ public class AddScheduleActivity extends AppCompatActivity {
 
                 }
             });
+        } else {
+            // When we are adding a new schedule or not present in firebase
+            initializeRecyclerView();
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         suggestionAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"Prabhatha Namaskaram", "Holy Qurbana", "Sunday School"});
@@ -86,7 +90,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         GregorianCalendar date = new GregorianCalendar(year, month, dayOfMonth);
                         SimpleDateFormat fmt = new SimpleDateFormat("MMMM d, EEEE");
-                        Log.d(TAG, "onDateSet: "+date.get(Calendar.DAY_OF_WEEK));
+                        Log.d(TAG, "onDateSet: " + date.get(Calendar.DAY_OF_WEEK));
                         binding.titleEditText.setText(fmt.format(date.getTime()));
                         binding.titleEditText.setSelection(binding.titleEditText.length());
                         schedule.setTitle(fmt.format(date.getTime()));
@@ -157,23 +161,24 @@ public class AddScheduleActivity extends AppCompatActivity {
                     ScheduleLab.getDatabase("/schedule").child(mKey).setValue(schedule).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "onFailure: "+e.getMessage());
+                            Log.d(TAG, "onFailure: " + e.getMessage());
                             SignInActivity.signOut();
                             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                             finish();
                         }
                     });
                 } else {
-                    Log.d(TAG, "onOptionsItemSelected: "+schedule.getTitle());
+                    Log.d(TAG, "onOptionsItemSelected: " + schedule.getTitle());
                     ScheduleLab.getDatabase("/schedule").push().setValue(schedule).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "onFailure: "+e.toString());
+                            Log.d(TAG, "onFailure: " + e.toString());
                             SignInActivity.signOut();
                             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                             finish();
                         }
-                    });;
+                    });
+                    ;
                 }
                 finish();
                 return true;

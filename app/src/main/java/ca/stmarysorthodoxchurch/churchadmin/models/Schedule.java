@@ -14,7 +14,6 @@ public class Schedule {
     ArrayList<String> times = new ArrayList<>();
 
     public Schedule() {
-
     }
 
     public Schedule(String title, long expiryDate, ArrayList<String> events, ArrayList<String> times) {
