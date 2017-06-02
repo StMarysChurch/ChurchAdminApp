@@ -94,6 +94,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                         binding.titleEditText.setText(fmt.format(date.getTime()));
                         binding.titleEditText.setSelection(binding.titleEditText.length());
                         schedule.setTitle(fmt.format(date.getTime()));
+                        schedule.setExpiryDate(date.getTimeInMillis());
                     }
                 }, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -156,7 +157,6 @@ public class AddScheduleActivity extends AppCompatActivity {
                         schedule.getEvents().remove(a);
                     }
                 }
-                schedule.setExpiryDate(String.valueOf(System.currentTimeMillis()));
                 if (mKey != null) {
                     ScheduleLab.getDatabase("/schedule").child(mKey).setValue(schedule).addOnFailureListener(new OnFailureListener() {
                         @Override
