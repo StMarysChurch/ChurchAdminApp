@@ -9,14 +9,14 @@ import java.util.ArrayList;
 public class Schedule {
 
     String title;
-    long expiryDate;
+    Long expiryDate;
     ArrayList<String> events = new ArrayList<>();
     ArrayList<String> times = new ArrayList<>();
 
     public Schedule() {
     }
 
-    public Schedule(String title, long expiryDate, ArrayList<String> events, ArrayList<String> times) {
+    public Schedule(String title, Long expiryDate, ArrayList<String> events, ArrayList<String> times) {
         this.title = title;
         this.expiryDate = expiryDate;
         this.events = events;
@@ -31,12 +31,12 @@ public class Schedule {
         this.title = title;
     }
 
-    public String getExpiryDate() {
-        return String.valueOf(expiryDate);
+    public Long getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setExpiryDate(String expiryDate) {
-        this.expiryDate = Long.valueOf(expiryDate);
+    public void setExpiryDate(Long expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     public ArrayList<String> getEvents() {
