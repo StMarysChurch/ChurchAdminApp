@@ -19,7 +19,7 @@ import ca.stmarysorthodoxchurch.churchadmin.models.Schedule;
 
 public class ListBinder {
 
-    @BindingAdapter("bind:events")
+    @BindingAdapter("events")
     public static void bindEvents(LinearLayout layout, Schedule schedule) {
         LayoutInflater inflater = (LayoutInflater) layout.getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
