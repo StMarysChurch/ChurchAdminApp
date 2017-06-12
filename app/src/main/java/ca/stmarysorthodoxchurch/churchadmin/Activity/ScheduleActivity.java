@@ -1,8 +1,11 @@
 package ca.stmarysorthodoxchurch.churchadmin.Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,10 +21,12 @@ import android.view.ViewGroup;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import ca.stmarysorthodoxchurch.churchadmin.BuildConfig;
 import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityScheduleBinding;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ScheduleListItemBinding;
@@ -77,12 +82,26 @@ public class ScheduleActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mKeys.clear();
                 mSchedule.clear();
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    mKeys.add(child.getKey());
-                    mSchedule.add(child.getValue(Schedule.class));
+                try {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        mKeys.add(child.getKey());
+                        mSchedule.add(child.getValue(Schedule.class));
+                    }
+                    Log.d(TAG, "onDataChange: " + mSchedule.size());
+                    binding.scheduleRecyclerView.setAdapter(mScheduleAdapter);
+                } catch (DatabaseException e) {
+                    binding.scheduleFab.hide();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleActivity.this);
+                    builder.setTitle("Stale App").setMessage("Please update app to the latest version");
+                    builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID)));
+                        }
+                    });
+                    AlertDialog updateDialog = builder.create();
+                    updateDialog.show();
                 }
-                Log.d(TAG, "onDataChange: " + mSchedule.size());
-                binding.scheduleRecyclerView.setAdapter(mScheduleAdapter);
             }
 
             @Override
