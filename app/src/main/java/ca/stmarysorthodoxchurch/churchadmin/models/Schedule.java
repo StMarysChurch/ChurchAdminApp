@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class Schedule {
 
-    String title;
-    Long expiryDate;
-    ArrayList<String> events = new ArrayList<>();
-    ArrayList<String> times = new ArrayList<>();
+    private String title;
+    private Long expiryDate;
+    private ArrayList<String> events = new ArrayList<>();
+    private ArrayList<String> times = new ArrayList<>();
 
     public Schedule() {
     }

@@ -134,13 +134,13 @@ public class ScheduleActivity extends AppCompatActivity {
     private class ScheduleHolder extends RecyclerView.ViewHolder {
         ScheduleListItemBinding binding;
 
-        public ScheduleHolder(View itemView, ScheduleListItemBinding binding) {
+        ScheduleHolder(View itemView, ScheduleListItemBinding binding) {
             super(itemView);
             this.binding = binding;
             this.binding.executePendingBindings();
         }
 
-        public void bindEvent(final int position) {
+        void bindEvent(final int position) {
             Log.d(TAG, "bindEvent: " + mSchedule.get(position).getTitle());
             binding.setSchedule(mSchedule.get(position));
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
