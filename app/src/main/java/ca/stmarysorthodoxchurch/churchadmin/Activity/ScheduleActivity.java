@@ -24,8 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-
 import ca.stmarysorthodoxchurch.churchadmin.BuildConfig;
 import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityScheduleBinding;
@@ -38,8 +36,6 @@ import static ca.stmarysorthodoxchurch.churchadmin.Activity.SignInActivity.signO
 
 public class ScheduleActivity extends AppCompatActivity {
     private static final String TAG = "ScheduleActivity";
-    ArrayList<Schedule> mSchedule = new ArrayList<>();
-    ArrayList<String> mKeys = new ArrayList<>();
     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
     private ActivityScheduleBinding binding;
     private ScheduleAdapter mScheduleAdapter = new ScheduleAdapter();
@@ -54,7 +50,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), AddScheduleActivity.class));
             }
         });
-        Log.d(TAG, "onCreate: " + mSchedule.size());
+        Log.d(TAG, "onCreate: " + ScheduleLab.getSchedule().size());
         binding.scheduleRecyclerView.setLayoutManager(layoutManager);
         DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(getApplicationContext(),
                 layoutManager.getOrientation());
@@ -65,9 +61,9 @@ public class ScheduleActivity extends AppCompatActivity {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 Log.d(TAG, "onSwiped: " + direction);
                 int position = viewHolder.getAdapterPosition();
-                ScheduleLab.getDatabase("/schedule").child(mKeys.get(position)).removeValue();
-                mKeys.remove(position);
-                mSchedule.remove(position);
+                ScheduleLab.getDatabase("/schedule").child(ScheduleLab.getKeys().get(position)).removeValue();
+                ScheduleLab.getKeys().remove(position);
+                ScheduleLab.getSchedule().remove(position);
                 mScheduleAdapter.notifyItemRemoved(position);
             }
         });
@@ -80,14 +76,14 @@ public class ScheduleActivity extends AppCompatActivity {
         ScheduleLab.getDatabase("/schedule").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mKeys.clear();
-                mSchedule.clear();
+                ScheduleLab.getKeys().clear();
+                ScheduleLab.getSchedule().clear();
                 try {
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        mKeys.add(child.getKey());
-                        mSchedule.add(child.getValue(Schedule.class));
+                        ScheduleLab.setKeys(child.getKey());
+                        ScheduleLab.setSchedule(child.getValue(Schedule.class));
                     }
-                    Log.d(TAG, "onDataChange: " + mSchedule.size());
+                    Log.d(TAG, "onDataChange: " + ScheduleLab.getSchedule().size());
                     binding.scheduleRecyclerView.setAdapter(mScheduleAdapter);
                 } catch (DatabaseException e) {
                     binding.scheduleFab.hide();
@@ -141,12 +137,12 @@ public class ScheduleActivity extends AppCompatActivity {
         }
 
         void bindEvent(final int position) {
-            Log.d(TAG, "bindEvent: " + mSchedule.get(position).getTitle());
-            binding.setSchedule(mSchedule.get(position));
+            Log.d(TAG, "bindEvent: " + ScheduleLab.getSchedule().get(position).getTitle());
+            binding.setSchedule(ScheduleLab.getSchedule().get(position));
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getApplicationContext(), AddScheduleActivity.class).putExtra(AddScheduleActivity.KEY, mKeys.get(position)));
+                    startActivity(new Intent(getApplicationContext(), AddScheduleActivity.class).putExtra(AddScheduleActivity.KEY, ScheduleLab.getKeys().get(position)));
                 }
             });
         }
@@ -169,8 +165,8 @@ public class ScheduleActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            Log.d(TAG, "getItemCount: I am being called " + mSchedule.size());
-            return mSchedule.size();
+            Log.d(TAG, "getItemCount: I am being called " + ScheduleLab.getSchedule().size());
+            return ScheduleLab.getSchedule().size();
         }
     }
 }

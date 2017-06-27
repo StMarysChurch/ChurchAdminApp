@@ -33,6 +33,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityAddScheduleBinding;
@@ -63,18 +64,7 @@ public class AddScheduleActivity extends AppCompatActivity {
         // Checking if we have schedule in firebase
         if (extras != null) {
             mKey = extras.getString(KEY);
-            ScheduleLab.getDatabase("/schedule").child(mKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    schedule = dataSnapshot.getValue(Schedule.class);
-                    initializeRecyclerView();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+            loadSchedule();
         } else {
             // When we are adding a new schedule or not present in firebase
             initializeRecyclerView();
@@ -89,10 +79,18 @@ public class AddScheduleActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         GregorianCalendar date = new GregorianCalendar(year, month, dayOfMonth);
-                        SimpleDateFormat fmt = new SimpleDateFormat("MMMM d, EEEE");
+                        SimpleDateFormat fmt = new SimpleDateFormat("MMMM d, EEEE", Locale.CANADA);
                         Log.d(TAG, "onDateSet: " + date.get(Calendar.DAY_OF_WEEK));
                         binding.titleEditText.setText(fmt.format(date.getTime()));
                         binding.titleEditText.setSelection(binding.titleEditText.length());
+                        // Check's if we have the current title in DB
+                        // If true then get existing entry for the title
+                        for (int x = 0; x < ScheduleLab.getSchedule().size(); x++) {
+                            if (fmt.format(date.getTime()).equals(ScheduleLab.getSchedule().get(x).getTitle())) {
+                                mKey = ScheduleLab.getKeys().get(x);
+                                loadSchedule();
+                            }
+                        }
                         schedule.setTitle(fmt.format(date.getTime()));
                         schedule.setExpiryDate(date.getTimeInMillis());
                     }
@@ -125,6 +123,21 @@ public class AddScheduleActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(binding.eventRecylerView);
     }
 
+    private void loadSchedule() {
+        ScheduleLab.getDatabase("/schedule").child(mKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                schedule = dataSnapshot.getValue(Schedule.class);
+                initializeRecyclerView();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void initializeRecyclerView() {
         binding.eventRecylerView.setLayoutManager(new LinearLayoutManager(this));
         binding.setSchedule(schedule);
@@ -148,6 +161,7 @@ public class AddScheduleActivity extends AppCompatActivity {
             case R.id.save_menu:
                 Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onOptionsItemSelected: title" + schedule.getTitle());
+                // Remove any empty entries
                 for (int a = schedule.getEvents().size() - 1; a >= 0; a--) {
                     Log.d(TAG, "onOptionsItemSelected: size " + a);
                     Log.d(TAG, "onOptionsItemSelected: event " + schedule.getEvents().get(a).length());
@@ -157,6 +171,8 @@ public class AddScheduleActivity extends AppCompatActivity {
                         schedule.getEvents().remove(a);
                     }
                 }
+                // Check if the key is empty
+                // Key is empty if its a new entry
                 if (mKey != null) {
                     ScheduleLab.getDatabase("/schedule").child(mKey).setValue(schedule).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -189,15 +205,15 @@ public class AddScheduleActivity extends AppCompatActivity {
     private class ItemEventHolder extends RecyclerView.ViewHolder {
         EditTextListItemBinding binding;
 
-        public ItemEventHolder(View itemView) {
+        ItemEventHolder(View itemView) {
             super(itemView);
             binding = DataBindingUtil.getBinding(itemView);
         }
 
-        public void bindEvent(final int position) {
+        void bindEvent(final int position) {
             final Calendar calendar = Calendar.getInstance();
             if (!schedule.getTimes().get(position).contentEquals(CURRENT_TIME)) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm aa");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm aa", Locale.CANADA);
                 try {
                     calendar.setTime(dateFormat.parse(schedule.getTimes().get(position)));
                 } catch (ParseException e) {
