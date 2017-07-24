@@ -2,6 +2,8 @@
 
 Simple app to manage schedule.
 
-![App Screenshot](https://raw.githubusercontent.com/RoneyThomas/ChurchAdmin/master/Docs/img/Screen%20Shot%202017-05-17%20at%207.04.35%20PM_iphoneserosegold_portrait.png)
+![App Screenshot](https://raw.githubusercontent.com/StMarysChurch/ChurchAdminApp/master/Docs/img/Screenshot_20170722-232052.png)
+![App Screenshot](https://raw.githubusercontent.com/StMarysChurch/ChurchAdminApp/master/Docs/img/Screenshot_20170722-232310.png)
+![App Screenshot](https://raw.githubusercontent.com/StMarysChurch/ChurchAdminApp/master/Docs/img/Screenshot_20170722-232322.png)
 ## How to setup
 Clone and import using Android Studio.
