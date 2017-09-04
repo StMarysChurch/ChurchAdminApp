@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -19,10 +20,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Collections;
 
 import ca.stmarysorthodoxchurch.churchadmin.BuildConfig;
 import ca.stmarysorthodoxchurch.churchadmin.R;
@@ -59,12 +63,39 @@ public class ScheduleActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                super.onSwiped(viewHolder, direction);
                 Log.d(TAG, "onSwiped: " + direction);
                 int position = viewHolder.getAdapterPosition();
                 ScheduleLab.getDatabase("/schedule").child(ScheduleLab.getKeys().get(position)).removeValue();
                 ScheduleLab.getKeys().remove(position);
                 ScheduleLab.getSchedule().remove(position);
                 mScheduleAdapter.notifyItemRemoved(position);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                Log.d("onMove", viewHolder.getAdapterPosition() + "   " + target.getAdapterPosition());
+                Collections.swap(ScheduleLab.getSchedule(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                ScheduleLab.getDatabase("/schedule").child(ScheduleLab.getKeys().get(viewHolder.getAdapterPosition())).setValue(ScheduleLab.getSchedule().get(viewHolder.getAdapterPosition())).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onFailure: " + e.getMessage());
+                        SignInActivity.signOut();
+                        startActivity(new Intent(getApplicationContext(), SignInActivity.class));
+                        finish();
+                    }
+                });
+                ScheduleLab.getDatabase("/schedule").child(ScheduleLab.getKeys().get(target.getAdapterPosition())).setValue(ScheduleLab.getSchedule().get(target.getAdapterPosition())).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onFailure: " + e.getMessage());
+                        SignInActivity.signOut();
+                        startActivity(new Intent(getApplicationContext(), SignInActivity.class));
+                        finish();
+                    }
+                });
+                mScheduleAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                return super.onMove(recyclerView, viewHolder, target);
             }
         });
         itemTouchHelper.attachToRecyclerView(binding.scheduleRecyclerView);
