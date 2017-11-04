@@ -1,11 +1,14 @@
 package ca.stmarysorthodoxchurch.churchadmin.models;
 
+import android.support.annotation.Keep;
+
 import java.util.ArrayList;
 
 /**
  * Created by roneythomas on 2016-10-04.
  */
 
+@Keep
 public class Schedule {
 
     private String title;

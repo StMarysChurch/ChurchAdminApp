@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +36,7 @@ import ca.stmarysorthodoxchurch.churchadmin.databinding.ScheduleListItemBinding;
 import ca.stmarysorthodoxchurch.churchadmin.helper.ScheduleLab;
 import ca.stmarysorthodoxchurch.churchadmin.helper.TouchHelper;
 import ca.stmarysorthodoxchurch.churchadmin.models.Schedule;
+import io.fabric.sdk.android.Fabric;
 
 import static ca.stmarysorthodoxchurch.churchadmin.Activity.SignInActivity.signOut;
 
@@ -47,6 +49,11 @@ public class ScheduleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        final Fabric fabric = new Fabric.Builder(this)
+//                .kits(new Crashlytics())
+//                .debuggable(true)           // Enables Crashlytics debugger
+//                .build();
+//        Fabric.with(fabric);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_schedule);
         binding.scheduleFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +124,7 @@ public class ScheduleActivity extends AppCompatActivity {
                     Log.d(TAG, "onDataChange: " + ScheduleLab.getSchedule().size());
                     binding.scheduleRecyclerView.setAdapter(mScheduleAdapter);
                 } catch (DatabaseException e) {
+                    Crashlytics.logException(e);
                     binding.scheduleFab.hide();
                     AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleActivity.this);
                     builder.setTitle("Stale App").setMessage("Please update app to the latest version");
@@ -153,6 +161,8 @@ public class ScheduleActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                 finish();
                 return true;
+            case R.id.crash:
+                Crashlytics.getInstance().crash();
             default:
                 return super.onOptionsItemSelected(item);
         }
