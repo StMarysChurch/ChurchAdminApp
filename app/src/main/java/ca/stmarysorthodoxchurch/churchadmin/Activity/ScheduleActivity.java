@@ -161,8 +161,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                 finish();
                 return true;
-            case R.id.crash:
-                Crashlytics.getInstance().crash();
             default:
                 return super.onOptionsItemSelected(item);
         }
