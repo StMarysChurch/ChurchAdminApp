@@ -30,13 +30,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Collections;
 
 import ca.stmarysorthodoxchurch.churchadmin.BuildConfig;
+import ca.stmarysorthodoxchurch.churchadmin.helper.Helper;
 import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityScheduleBinding;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ScheduleListItemBinding;
 import ca.stmarysorthodoxchurch.churchadmin.helper.ScheduleLab;
 import ca.stmarysorthodoxchurch.churchadmin.helper.TouchHelper;
 import ca.stmarysorthodoxchurch.churchadmin.models.Schedule;
-import io.fabric.sdk.android.Fabric;
 
 import static ca.stmarysorthodoxchurch.churchadmin.Activity.SignInActivity.signOut;
 
@@ -161,6 +161,8 @@ public class ScheduleActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                 finish();
                 return true;
+            case R.id.job_schedule:
+                Helper.scheduleJob(this);
             default:
                 return super.onOptionsItemSelected(item);
         }
