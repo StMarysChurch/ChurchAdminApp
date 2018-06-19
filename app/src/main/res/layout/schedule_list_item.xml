@@ -16,7 +16,7 @@
         android:layout_gravity="center"
         android:orientation="vertical">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -45,7 +45,7 @@
                 app:layout_constraintRight_toLeftOf="@+id/guideline_right"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                 card:layout_editor_absoluteX="8dp"
                 card:layout_editor_absoluteY="0dp" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 card:layout_editor_absoluteX="376dp"
                 card:layout_editor_absoluteY="0dp" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_top"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -72,7 +72,7 @@
                 card:layout_editor_absoluteX="0dp"
                 card:layout_editor_absoluteY="8dp" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                 card:layout_editor_absoluteX="0dp"
                 card:layout_editor_absoluteY="91dp" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
 </layout>

@@ -1,7 +1,7 @@
 package ca.stmarysorthodoxchurch.churchadmin.helper;
 
 import android.content.Context;
-import android.databinding.BindingAdapter;
+import androidx.databinding.BindingAdapter;
 import android.graphics.Typeface;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;

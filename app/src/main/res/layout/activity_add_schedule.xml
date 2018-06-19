@@ -10,7 +10,7 @@
             type="ca.stmarysorthodoxchurch.churchadmin.models.Schedule" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -43,12 +43,12 @@
 
         <ImageButton
             android:id="@+id/dateButton"
-            style="@android:style/Widget.Material.ImageButton"
+            style="@style/Widget.AppCompat.ImageButton"
             android:layout_width="57dp"
             android:layout_height="48dp"
             android:backgroundTint="@color/colorAccent"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_date_range_white_24px"
+            app:srcCompat="@drawable/ic_date_range_white_24px"
             app:layout_constraintBottom_toBottomOf="@+id/titleEditText"
             app:layout_constraintRight_toLeftOf="@+id/guideline3"
             android:layout_marginEnd="0dp"
@@ -68,7 +68,7 @@
             app:layout_constraintRight_toLeftOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/event_recylerView" />
 
-        <android.support.constraint.Guideline
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="0dp" />
 
-        <android.support.constraint.Guideline
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="16dp" />
 
-        <android.support.constraint.Guideline
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
             tools:layout_editor_absoluteX="344dp"
             tools:layout_editor_absoluteY="0dp" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/event_recylerView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -103,5 +103,5 @@
             app:layout_constraintLeft_toLeftOf="@+id/guideline1"
             app:layout_constraintRight_toLeftOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/titleEditText" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
