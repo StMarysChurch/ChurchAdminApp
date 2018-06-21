@@ -3,16 +3,22 @@ package ca.stmarysorthodoxchurch.churchadmin.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
 import androidx.databinding.DataBindingUtil;
+
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
@@ -32,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.fragment.app.FragmentActivity;
 import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivitySigninBinding;
 import ca.stmarysorthodoxchurch.churchadmin.helper.ScheduleLab;
@@ -40,15 +47,17 @@ import ca.stmarysorthodoxchurch.churchadmin.helper.ScheduleLab;
  * Created by roneythomas on 2016-10-03.
  */
 
-public class SignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class SignInActivity extends AppCompatActivity {
     private static final String TAG = "SignInActivity";
     private static int RC_SIGN_IN = 2420;
     private FirebaseAuth mAuth;
-    private GoogleApiClient mGoogleApiClient;
     private SharedPreferences sharedPref;
+    private static GoogleSignInClient mGoogleSignInClient;
 
     public static void signOut() {
         FirebaseAuth.getInstance().signOut();
+        mGoogleSignInClient.signOut();
+        mGoogleSignInClient.revokeAccess();
     }
 
     @Override
@@ -67,14 +76,11 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                     .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()
                     .build();
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .enableAutoManage(this, this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
             binding.signInButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                    Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                     startActivityForResult(signInIntent, RC_SIGN_IN);
                 }
             });
@@ -126,7 +132,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         ScheduleLab.getDatabase("/scheduleUsers").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                sharedPref.edit().putBoolean(getString(R.string.preference_auth_status), true).commit();
+                sharedPref.edit().putBoolean(getString(R.string.preference_auth_status), true).apply();
                 Log.d(TAG, dataSnapshot.toString());
                 startActivity(new Intent(getApplicationContext(), ScheduleActivity.class));
                 finish();
@@ -134,7 +140,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                sharedPref.edit().putBoolean(getString(R.string.preference_auth_status), false).commit();
+                sharedPref.edit().putBoolean(getString(R.string.preference_auth_status), false).apply();
                 Toast.makeText(SignInActivity.this, "Not Authorized",
                         Toast.LENGTH_SHORT).show();
                 Map<String, String> user = new HashMap<>();
@@ -144,18 +150,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 Log.d(TAG, "onCancelled: " + user.toString() + "\n" + mAuth.getCurrentUser().getUid());
                 ScheduleLab.getDatabase("/queue").child(mAuth.getCurrentUser().getUid()).setValue(user);
                 signOut();
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        Log.d(TAG, "Google Sign Out Status: " + status);
-                    }
-                });
             }
         });
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(TAG, "onConnectionFailed" + connectionResult.toString());
     }
 }
