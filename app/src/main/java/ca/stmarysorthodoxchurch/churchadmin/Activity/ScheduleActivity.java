@@ -30,7 +30,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Collections;
 
 import ca.stmarysorthodoxchurch.churchadmin.BuildConfig;
-import ca.stmarysorthodoxchurch.churchadmin.helper.Helper;
 import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityScheduleBinding;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ScheduleListItemBinding;
@@ -161,8 +160,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                 finish();
                 return true;
-            case R.id.job_schedule:
-                Helper.scheduleJob(this);
             default:
                 return super.onOptionsItemSelected(item);
         }
