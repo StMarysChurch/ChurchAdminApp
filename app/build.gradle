@@ -8,7 +8,7 @@ android {
         applicationId "ca.stmarysorthodoxchurch.churchadmin"
         minSdkVersion 25
         targetSdkVersion 28
-        versionCode 22
+        versionCode 23
         versionName "1.9.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
