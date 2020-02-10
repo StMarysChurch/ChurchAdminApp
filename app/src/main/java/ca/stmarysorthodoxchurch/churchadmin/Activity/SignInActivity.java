@@ -131,7 +131,7 @@ public class SignInActivity extends AppCompatActivity {
     public void authorization() {
         ScheduleLab.getDatabase("/scheduleUsers").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 sharedPref.edit().putBoolean(getString(R.string.preference_auth_status), true).apply();
                 Log.d(TAG, dataSnapshot.toString());
                 startActivity(new Intent(getApplicationContext(), ScheduleActivity.class));
@@ -139,7 +139,7 @@ public class SignInActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 sharedPref.edit().putBoolean(getString(R.string.preference_auth_status), false).apply();
                 Toast.makeText(SignInActivity.this, "Not Authorized",
                         Toast.LENGTH_SHORT).show();

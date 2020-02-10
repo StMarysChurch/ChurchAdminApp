@@ -112,7 +112,7 @@ public class ScheduleActivity extends AppCompatActivity {
         super.onResume();
         ScheduleLab.getDatabase("/schedule").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ScheduleLab.getKeys().clear();
                 ScheduleLab.getSchedule().clear();
                 try {
@@ -139,7 +139,7 @@ public class ScheduleActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG, "onCancelled: databaseError " + databaseError.getDetails());
             }
         });
@@ -188,6 +188,7 @@ public class ScheduleActivity extends AppCompatActivity {
 
     private class ScheduleAdapter extends RecyclerView.Adapter<ScheduleHolder> {
 
+        @NonNull
         @Override
         public ScheduleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             ScheduleListItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.schedule_list_item, parent, false);

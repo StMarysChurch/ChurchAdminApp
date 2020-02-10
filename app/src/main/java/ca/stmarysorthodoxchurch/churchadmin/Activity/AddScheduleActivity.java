@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.Objects;
 
 import ca.stmarysorthodoxchurch.churchadmin.R;
 import ca.stmarysorthodoxchurch.churchadmin.databinding.ActivityAddScheduleBinding;
@@ -69,7 +70,7 @@ public class AddScheduleActivity extends AppCompatActivity {
             // When we are adding a new schedule or not present in firebase
             initializeRecyclerView();
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         suggestionAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"Prabhatha Namaskaram", "Holy Qurbana", "Sunday School"});
         final Calendar today = Calendar.getInstance();
         binding.dateButton.setOnClickListener(new View.OnClickListener() {
@@ -126,13 +127,13 @@ public class AddScheduleActivity extends AppCompatActivity {
     private void loadSchedule() {
         ScheduleLab.getDatabase("/schedule").child(mKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 schedule = dataSnapshot.getValue(Schedule.class);
                 initializeRecyclerView();
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
@@ -215,7 +216,7 @@ public class AddScheduleActivity extends AppCompatActivity {
             if (!schedule.getTimes().get(position).contentEquals(CURRENT_TIME)) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm aa", Locale.CANADA);
                 try {
-                    calendar.setTime(dateFormat.parse(schedule.getTimes().get(position)));
+                    calendar.setTime(Objects.requireNonNull(dateFormat.parse(schedule.getTimes().get(position))));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -269,8 +270,9 @@ public class AddScheduleActivity extends AppCompatActivity {
 
     private class ItemEventAdapter extends RecyclerView.Adapter<ItemEventHolder> {
 
+        @NonNull
         @Override
-        public ItemEventHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ItemEventHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             Log.d(TAG, "onCreateViewHolder: called");
             EditTextListItemBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.edit_text_list_item, parent, false);
             return new ItemEventHolder(binding.getRoot());
