@@ -10,7 +10,8 @@
 
         <!--&lt;!&ndash; New MaterialComponents attributes. &ndash;&gt;-->
         <!--<item name="colorPrimaryLight">?attr/colorPrimary</item>-->
-        <!--<item name="colorSecondary">?attr/colorPrimary</item>-->
+        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="colorOnSecondary">@color/colorBackground</item>
         <!--<item name="colorSecondaryLight">?attr/colorPrimaryLight</item>-->
         <!--<item name="colorSecondaryDark">?attr/colorPrimaryDark</item>-->
         <!--<item name="scrimBackground">@color/mtrl_scrim_color</item>-->
